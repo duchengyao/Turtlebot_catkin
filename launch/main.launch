@@ -1,0 +1,38 @@
+<launch>
+
+
+  <include file="rplidar_robot.launch" />
+
+  <include file="turtlebot_bringup_minimal.launch" />
+
+
+
+
+  <include file="$(find yocs_velocity_smoother)/launch/velocity_smoother.launch">
+    <arg name="config_file"	      value="../configuration/yocs_velocity_smoother_param.yaml"/>
+    <arg name="nodelet_manager_name"  value="mobile_base_nodelet_manager"/>
+    <arg name="raw_cmd_vel_topic"     value="cmd_vel"/>
+    <arg name="smooth_cmd_vel_topic"  value="cmd_vel_mux/input/navi"/>
+  </include>
+
+
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+
+
+
+    <rosparam file="../configuration/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="../configuration/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="../configuration/local_costmap_params.yaml" command="load" />
+    <rosparam file="../configuration/global_costmap_params.yaml" command="load" />
+    <rosparam file="../configuration/move_base_params.yaml" command="load" />
+    <rosparam file="../configuration/dwa_local_planner_params.yaml" command="load" />
+    <rosparam file="../configuration/navfn_global_planner_params.yaml" command="load" />
+    <rosparam file="../configuration/global_planner_params.yaml" command="load" />
+  </node>
+
+
+  <include file="cartographer_turtlebot_lidar_2d.launch" />  
+
+</launch>
+
+
